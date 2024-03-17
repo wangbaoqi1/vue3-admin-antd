@@ -162,6 +162,9 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
       minify: 'esbuild',
       cssTarget: 'chrome79',
       chunkSizeWarningLimit: 2000,
+      rollupOptions: {
+        external: ['crypto-js'],
+      },
     },
   };
 };

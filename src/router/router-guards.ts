@@ -63,7 +63,7 @@ export function createRouterGuards(router: Router, whiteNameList: WhiteNameList)
     const token = Storage.get(ACCESS_TOKEN_KEY, null);
 
     if (isNavigationFailure(failure)) {
-      console.error('failed navigation', failure);
+      console.log('failed navigation', failure);
     }
     // 在这里设置需要缓存的组件名称
     const toCompName = getComponentName(to);

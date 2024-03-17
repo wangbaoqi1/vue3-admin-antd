@@ -139,6 +139,7 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
           ws: true,
         },
       },
+      open: true,
     },
     optimizeDeps: {
       include: [

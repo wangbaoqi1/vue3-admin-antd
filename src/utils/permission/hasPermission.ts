@@ -1,5 +1,7 @@
 import type { App } from 'vue';
+import { RoleEnum } from '@/enums/roleEnum';
 import router from '@/router';
+import { Storage } from '@/utils/Storage';
 
 /**
  * 第一种权限验证形式
@@ -28,6 +30,32 @@ export const hasPermission = (action: string) => {
   // } else {
   //     return permissions.some(item => item.action == action)
   // }
+};
+/**
+ * 前端通过角色判断数据是否有权限
+ * @param {[string]} roles
+ */
+export const hasRolePermission = (roles: RoleEnum[] = []) => {
+  const { roles: userRoles } = Storage.get('userInfo');
+  const roleArr: RoleEnum[] = userRoles.map((val) => val.value);
+  let flag = false;
+  roles.forEach((val) => {
+    roleArr.some(function (item) {
+      if (item == val) {
+        flag = true;
+        return true;
+      }
+    });
+  });
+  //超管拥有所有权限
+  if (roleArr.includes(RoleEnum.ADMIN)) {
+    flag = true;
+  }
+  //不做角色限制的时候拥有所有权限
+  if (roles.length === 0) {
+    flag = true;
+  }
+  return flag;
 };
 
 // 暴露一个插件 API

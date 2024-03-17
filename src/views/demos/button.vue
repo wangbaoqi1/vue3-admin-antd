@@ -3,15 +3,15 @@
     <Alert message="扩展antd按钮样式" type="info" show-icon style="margin-bottom: 12px" />
     <Card>
       <Divider orientation="left">扩展按钮类型</Divider>
-      <Space>
-        <AButton type="primary">primary</AButton>
+      <Space v-mark="['admin1']">
+        <AButton type="primary">primary1111</AButton>
         <AButton type="error">error</AButton>
-        <AButton type="warning">warning</AButton>
+        <AButton type="warning">warning111</AButton>
         <AButton type="success">success</AButton>
       </Space>
 
       <Divider orientation="left">自定义按钮颜色</Divider>
-      <Space>
+      <Space v-permission="909090">
         <template v-for="item in themeColors" :key="item.key">
           <AButton :color="item.value">{{ item.title }}</AButton>
         </template>

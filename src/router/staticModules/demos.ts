@@ -13,6 +13,7 @@ const routes: Array<RouteRecordRaw> = [
     meta: {
       title: t('routes.demo.demo'),
       icon: 'icon-zhuomian',
+      permsRole: ['admin'],
     },
     children: [
       {

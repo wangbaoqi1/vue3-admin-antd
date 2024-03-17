@@ -56,6 +56,7 @@ export function filterAsyncRoute(
           title: name,
           type: item.type,
           perms: [],
+          permsRole: [],
           namePath: lastNamePath.concat(fullPath),
           keepAlive: keepalive,
         },
@@ -106,16 +107,18 @@ export function filterAsyncRoute(
  * 动态生成菜单
  * @param token
  * @returns {Promise<Router>}
+ * generatorDynamicRouter = (asyncMenus?: API.Menu[])
  */
-export const generatorDynamicRouter = (asyncMenus: API.Menu[]) => {
+export const generatorDynamicRouter = () => {
   try {
     // console.log('asyncMenus', asyncMenus);
-    const routeList = filterAsyncRoute(asyncMenus);
+    // const routeList = filterAsyncRoute(asyncMenus);
     const layout = routes.find((item) => item.name == 'Layout')!;
-    console.log(routeList, '根据后端返回的权限路由生成');
+    // console.log(routeList, '根据后端返回的权限路由生成');
     // 给公共路由添加namePath
     generatorNamePath(common);
-    const menus = [...common, ...routeList, ...endRoutes];
+    // const menus = [...common, ...routeList, ...endRoutes];
+    const menus = [...common, ...endRoutes];
     layout.children = menus;
     const removeRoute = router.addRoute(layout);
     // 获取所有没有包含children的路由，上面addRoute的时候，vue-router已经帮我们拍平了所有路由
@@ -126,6 +129,8 @@ export const generatorDynamicRouter = (asyncMenus: API.Menu[]) => {
           (!item.children.length || Object.is(item.meta?.hideChildrenInMenu, true)) &&
           !outsideLayout.some((n) => n.name === item.name),
       );
+    console.log(11111111, filterRoutes, common, endRoutes);
+
     // 清空所有路由
     removeRoute();
     layout.children = [...filterRoutes];

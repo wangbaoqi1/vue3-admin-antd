@@ -9,6 +9,7 @@ import { Storage } from '@/utils/Storage';
 import { logout, getInfo, permmenu } from '@/api/account';
 import { generatorDynamicRouter } from '@/router/generator-router';
 import { resetRouter } from '@/router';
+import { hasRolePermission } from '@/utils/permission/hasPermission';
 
 interface UserState {
   token: string;
@@ -76,24 +77,27 @@ export const useUserStore = defineStore({
         // const wsStore = useWsStore();
         // const [userInfo, data] = await Promise.all([getInfo(), permmenu()]);
         const userInfo = await getInfo();
-        const data = await permmenu();
-        console.log(userInfo, '_____________', data);
-
+        Storage.set('userInfo', userInfo, 7 * 24 * 60 * 60 * 2);
         // this.perms = perms;
         this.name = userInfo.name;
         this.avatar = userInfo.headImg;
         this.userInfo = userInfo;
-        // 生成路由
-        const generatorResult = await generatorDynamicRouter(data);
-        console.log(generatorResult, 111119090);
-        const menus = [];
-        this.menus = generatorResult.menus.filter((item) => !item.meta?.hideInMenu);
-        return false;
+        // 根据后端接口生成路由
+        // const generatorResult = await generatorDynamicRouter(data);
+        // 前端生成路由
+        const generatorResult = await generatorDynamicRouter();
+        const routerArr = generatorResult.menus.map((item) => {
+          //没权限时隐藏菜单
+          if (!hasRolePermission(item.meta?.permsRole || []) && item.meta) {
+            item.meta.hideInMenu = true;
+          }
+          return item;
+        });
+        this.menus = routerArr.filter((item) => !item.meta?.hideInMenu);
         //websocket初始化
         // !wsStore.client && wsStore.initSocket();
-        //后期在加权限
         // return { menus, perms, userInfo };
-        return { menus, userInfo };
+        return { menus: this.menus, userInfo };
       } catch (error) {
         return Promise.reject(error);
         // return this.logout();

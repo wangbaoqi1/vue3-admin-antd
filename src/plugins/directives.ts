@@ -1,6 +1,5 @@
 import type { App } from 'vue';
-
-import { permission } from '@/directives/permission';
+import { markDirective, permission } from '@/directives/permission';
 
 /**
  * 注册全局自定义指令
@@ -9,4 +8,5 @@ import { permission } from '@/directives/permission';
 export function setupDirectives(app: App) {
   // 权限控制指令（演示）
   app.directive('permission', permission);
+  app.directive('mark', markDirective);
 }

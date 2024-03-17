@@ -1,6 +1,7 @@
 import { type RouteMeta as VRouteMeta } from 'vue-router';
 import { type PermissionType } from '@/core/permission/modules/types';
 import { type LocaleType } from '@/locales/config';
+import { RoleEnum } from '@/enums/roleEnum';
 
 declare global {
   type Title18n = {
@@ -14,8 +15,12 @@ declare module 'vue-router' {
     title: string | Title18n;
     /** 当前菜单类型 0: 目录 | 1: 菜单 | 2: 权限 */
     type?: 0 | 1 | 2;
-    /** 当前路由权限 */
+    /** 当前路由权限 后端控制权限*/
     perms?: PermissionType[];
+    /** 当前路由权限 前端根据角色控制权限,超级管理员拥有所有权限*/
+    permsRole?: string[];
+    /** 当前路由是否隐藏 */
+    hidden?: boolean;
     /** 是否需要缓存 */
     keepAlive?: boolean;
     /** 当前路由namePath 祖先name集合 */

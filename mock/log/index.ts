@@ -575,7 +575,7 @@ export default [
               createdAt: '2023-11-09T16:31:44.058Z',
               updatedAt: '2024-01-28T13:08:39.000Z',
               name: '管理员',
-              value: 'user',
+              value: 'admin',
               remark: '超级管理员',
               status: 1,
               default: null,

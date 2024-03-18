@@ -9,9 +9,12 @@ import Components from 'unplugin-vue-components/vite';
 import { AntDesignVueResolver } from 'unplugin-vue-components/resolvers';
 import Unocss from 'unocss/vite';
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons';
+
+import { visualizer } from 'rollup-plugin-visualizer';
 import dayjs from 'dayjs';
 import pkg from './package.json';
-import type { UserConfig, ConfigEnv } from 'vite';
+import { cdn } from './build/cdn';
+import type { UserConfig, ConfigEnv, PluginOption } from 'vite';
 
 const CWD = process.cwd();
 
@@ -28,7 +31,7 @@ const __APP_INFO__ = {
 // https://vitejs.dev/config/
 export default ({ command, mode }: ConfigEnv): UserConfig => {
   // 环境变量
-  const { VITE_BASE_URL, VITE_DROP_CONSOLE } = loadEnv(mode, CWD);
+  const { VITE_BASE_URL, VITE_DROP_CONSOLE, VITE_CDN } = loadEnv(mode, CWD);
 
   const isBuild = command === 'build';
 
@@ -51,7 +54,10 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
       vueJsx({
         // options are passed on to @vue/babel-plugin-jsx
       }),
-
+      visualizer({
+        open: true, //在默认用户代理中打开生成的文件
+      }) as PluginOption,
+      VITE_CDN ? cdn : null,
       legacy({
         targets: ['defaults', 'not IE 11', 'chrome 79', 'maintained node versions'],
         additionalLegacyPolyfills: ['regenerator-runtime/runtime'],

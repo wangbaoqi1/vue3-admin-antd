@@ -1,4 +1,3 @@
-import CryptoJS from 'crypto-js';
 import { isObject } from './is';
 import type { App, Component, Plugin } from 'vue';
 
@@ -88,30 +87,3 @@ export const withInstall = <T>(component: Component<T>, alias?: string) => {
   };
   return component as T & Plugin;
 };
-
-const keyValue = 'cjokpopl';
-// 加密函数
-export function encryptData(data: any, key: string = keyValue) {
-  // 将密钥转换成 128 位的十六进制字符串
-  const keyHex = CryptoJS.enc.Utf8.parse(key);
-  // 使用 AES 加密算法对数据进行加密
-  const encrypted = CryptoJS.AES.encrypt(data, keyHex, {
-    mode: CryptoJS.mode.ECB, // 使用 ECB 模式进行加密
-    padding: CryptoJS.pad.Pkcs7, // 使用 PKCS7 填充
-  });
-  // 返回加密后的密文
-  return encrypted.toString();
-}
-
-// 解密函数
-export function decryptData(encryptedData: any, key: string = keyValue) {
-  // 将密钥转换成 128 位的十六进制字符串
-  const keyHex = CryptoJS.enc.Utf8.parse(key);
-  // 使用 AES 解密算法对数据进行解密
-  const decrypted = CryptoJS.AES.decrypt(encryptedData, keyHex, {
-    mode: CryptoJS.mode.ECB, // 使用 ECB 模式进行解密
-    padding: CryptoJS.pad.Pkcs7, // 使用 PKCS7 填充
-  });
-  // 将解密后的数据转换为字符串并返回
-  return decrypted.toString(CryptoJS.enc.Utf8);
-}

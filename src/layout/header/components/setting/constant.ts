@@ -40,7 +40,7 @@ export const themeColors = [
   {
     title: '火山',
     key: 'volcano',
-    value: '#FA541C',
+    value: '#FA8C16',
   },
   {
     title: '日暮',

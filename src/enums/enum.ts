@@ -40,6 +40,11 @@ class EnumClass {
   }
 }
 
+export const enumToObjArr = (enumObj) =>
+  Object.values(enumObj).map((item: Record<any, string>) => ({
+    value: item.value,
+    label: item.message,
+  }));
 const ProductTypeEnum = new EnumClass({
   WLHY: Enum(1, '网络货运'),
   WCCY: Enum(2, '无船承运'),

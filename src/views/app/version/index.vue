@@ -1,16 +1,13 @@
 <template>
   <div>
-    <Alert message="游戏介绍" type="info" show-icon>
-      <template #description> 《王者荣耀》-- 根据JSON格式的数据进行导出 </template>
-    </Alert>
-    <Card title="英雄列表mock数据" style="margin-top: 20px">
+    <Card>
       <DynamicTable
         ref="dynamicTableRef"
         size="small"
         bordered
         :data-request="loadData"
         :columns="columns"
-        row-key="heroid"
+        :scroll="{ x: 1500, y: 300 }"
         @toggle-advanced="toggleAdvanced"
       >
         <template #toolbar>
@@ -23,12 +20,13 @@
 </template>
 
 <script lang="ts" setup>
-  import { Alert, Card } from 'ant-design-vue';
+  import { onMounted } from 'vue';
+  import { Card } from 'ant-design-vue';
   import { columns } from './columns';
   import { useTable } from '@/components/core/dynamic-table';
   import { jsonToSheetXlsx } from '@/components/basic/excel';
-
-  import { getWzryHeroList } from '@/api/demos/hero';
+  import { ProductTypeEnum } from '@/enums/enum';
+  import { appVersionFindApi } from '@/api/app';
 
   let tableData = [];
   const [DynamicTable, dynamicTableInstance] = useTable();
@@ -42,51 +40,18 @@
   }
 
   // 自定义头部
-  function customHeader() {
-    jsonToSheetXlsx({
-      data: tableData,
-      header: {
-        heroid: 'ID',
-        cname: '英雄名称',
-        title: '英雄称号',
-        occupation: '定位',
-        skin_name: '皮肤',
-      },
-      filename: '自定义头部.xlsx',
-      json2sheetOpts: {
-        // 指定顺序
-        header: ['cname', 'heroid'],
-      },
-    });
-  }
+  function customHeader() {}
 
   // 展开搜索表单时更新英雄皮肤选项值
-  const toggleAdvanced = (e) => {
-    if (e) {
-      //dynamicTableInstance?.getQueryFormRef().updateSchema([
-      //   {
-      //     field: 'skin_name',
-      //     componentProps: {
-      //       options: [
-      //         {
-      //           label: '皮肤1',
-      //           value: 'aa',
-      //         },
-      //         {
-      //           label: '皮肤2',
-      //           value: 'bb',
-      //         },
-      //       ],
-      //     },
-      //   },
-      // ]);
-    }
-  };
+  const toggleAdvanced = (e) => {};
 
   const loadData = async (params) => {
-    const { data } = await getWzryHeroList(params);
+    const { data } = await appVersionFindApi(params);
 
     tableData = data.list;
+    data.list = data.content;
+    console.log(data, 11111990);
+
     dynamicTableInstance?.getQueryFormRef()?.updateSchema?.([
       {
         field: 'skin_name',
@@ -106,6 +71,11 @@
     ]);
     return data;
   };
+  onMounted(() => {
+    console.log(ProductTypeEnum, 1110000000);
+  });
 </script>
 
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+  @import url('./index.less');
+</style>

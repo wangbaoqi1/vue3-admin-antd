@@ -16,5 +16,5 @@ export function permmenu(parameter) {
   return Api.requestParam('account/permmenu', 'post', parameter);
 }
 export function logout(parameter) {
-  return Api.requestParam('/count/logout', 'post', parameter);
+  return Api.requestParam('count/logout', 'post', { ...parameter, isMock: true });
 }

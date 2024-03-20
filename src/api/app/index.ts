@@ -12,5 +12,5 @@ export function appVersionSavaApi(parameter) {
 }
 
 export function appVersionFindApi(parameter) {
-  return Api.requestParam('/app-version/save', 'get', { ...parameter, isMock: true });
+  return Api.requestParam('/app-version/find', 'get', { ...parameter, isMock: true });
 }

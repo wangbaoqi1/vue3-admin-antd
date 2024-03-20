@@ -87,3 +87,49 @@ export const withInstall = <T>(component: Component<T>, alias?: string) => {
   };
   return component as T & Plugin;
 };
+
+export const objToArr = (obj: Record<string, any>) => {
+  return Object.entries(obj).map(([key, value]) => ({ label: value, value: key }));
+};
+
+// 用于模拟接口请求
+export const getRemoteTableData = (data = [], time = 1000) => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      const retObj = {
+        list: data,
+        total: 100,
+        pageSize: 10,
+        pageNum: 1,
+      };
+      resolve(retObj);
+    }, time);
+  });
+};
+
+// 指定范围随机数
+export const getRandomNumber = (min, max) => {
+  return Math.floor(Math.random() * (max - min + 1) + min);
+};
+
+// 判断空值
+export const isEmpty = (value) => {
+  if (Array.isArray(value)) {
+    return !value.length;
+  } else if (Object.prototype.toString.call(value) === '[object Object]') {
+    return !Object.keys(value).length;
+  } else {
+    return [null, undefined, ''].includes(value);
+  }
+};
+
+//  数字格式化
+export const formatNumber = (num) =>
+  num ? `${num}`.replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,') : isEmpty(num) ? '' : 0;
+
+// 百分比格式化
+export const formatPercent = (percent, n = 2) =>
+  isEmpty(percent) ? '' : `${(+percent).toFixed(n)}%`;
+
+// 金额格式化
+export const formatMoney = (num) => (isEmpty(num) ? '' : formatNumber(num.toFixed(2)));

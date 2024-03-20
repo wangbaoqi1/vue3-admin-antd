@@ -1,80 +1,40 @@
+import API from '../login/loginApi';
 import { request } from '@/utils/request';
 import Api from '@/core/permission/modules/netdisk/manage';
-
-export function netdiskManageList(params: API.NetdiskManageListParams) {
-  return request<API.NetdiskManageList>({
-    url: Api.list,
-    method: 'get',
-    params,
-  });
+export function netdiskManageList(parameter) {
+  return API.requestParam(Api.list, 'get', { ...parameter });
 }
 
-export function mkdir(data: API.MkdirParams) {
-  return request({
-    url: Api.mkdir,
-    method: 'post',
-    data,
-  });
+export function mkdir(parameter) {
+  return API.requestParam(Api.mkdir, 'post', { ...parameter });
 }
 
-export function getUploadToken() {
-  return request<{ token: string }>({
-    url: Api.token,
-    method: 'get',
-  });
+export function getUploadToken(parameter) {
+  return API.requestParam(Api.token, 'get', { ...parameter });
 }
 
-export function fileInfo(data: API.getManageParams) {
-  return request<API.FileInfo>({
-    url: Api.info,
-    method: 'post',
-    data,
-  });
+export function fileInfo(parameter) {
+  return API.requestParam(Api.info, 'post', { ...parameter });
+}
+export function fileMark(parameter) {
+  return API.requestParam(Api.mark, 'post', { ...parameter });
 }
 
-export function fileMark(data: API.FIleMarkParams) {
-  return request({
-    url: Api.mark,
-    method: 'post',
-    data,
-  });
+export function downloadFile(parameter) {
+  return API.requestParam(Api.download, 'post', { ...parameter });
+}
+export function renameFile(parameter) {
+  return API.requestParam(Api.rename, 'post', { ...parameter });
 }
 
-export function downloadFile(data: API.getManageParams) {
-  return request({
-    url: Api.download,
-    method: 'post',
-    data,
-  });
-}
-export function renameFile(data: API.FileRenameParams) {
-  return request({
-    url: Api.rename,
-    method: 'post',
-    data,
-  });
+export function delFileOrDir(parameter) {
+  return API.requestParam(Api.delete, 'post', { ...parameter });
 }
 
-export function delFileOrDir(data: API.DelFileOrDirParams) {
-  return request({
-    url: Api.delete,
-    method: 'post',
-    data,
-  });
+export function fileBatchCut(parameter) {
+  return API.requestParam(Api.cut, 'post', { ...parameter });
 }
 
-export function fileBatchCut(data: API.fileBatchCutParams) {
-  return request({
-    url: Api.cut,
-    method: 'post',
-    data,
-  });
-}
-
-export function fileBatchCopy(data: API.fileBatchCutParams) {
-  return request({
-    url: Api.copy,
-    method: 'post',
-    data,
-  });
+export function fileBatchCopy(parameter) {
+  return API.requestParam(Api.copy, 'post', { ...parameter });
 }

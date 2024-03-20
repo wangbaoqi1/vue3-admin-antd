@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { message as $message } from 'ant-design-vue';
 import type { AxiosRequestConfig } from 'axios';
-import { ACCESS_TOKEN_KEY } from '@/enums/cacheEnum';
+import { ACCESS_TOKEN } from '@/enums/cacheEnum';
 import { Storage } from '@/utils/Storage';
 import { useUserStore } from '@/store/modules/user';
 import { uniqueSlash } from '@/utils/urlUtils';
@@ -33,7 +33,7 @@ const service = axios.create({
 
 service.interceptors.request.use(
   (config) => {
-    const token = Storage.get(ACCESS_TOKEN_KEY);
+    const token = Storage.get(ACCESS_TOKEN);
     if (token && config.headers) {
       // 请求头token信息，请根据实际情况进行修改
       config.headers['Authorization'] = token;

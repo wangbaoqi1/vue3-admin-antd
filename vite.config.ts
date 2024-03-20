@@ -57,7 +57,7 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
       visualizer({
         open: true, //在默认用户代理中打开生成的文件
       }) as PluginOption,
-      VITE_CDN ? cdn : null,
+      // VITE_CDN ? cdn : null,
       legacy({
         targets: ['defaults', 'not IE 11', 'chrome 79', 'maintained node versions'],
         additionalLegacyPolyfills: ['regenerator-runtime/runtime'],
@@ -133,13 +133,11 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
       port: 8088,
       proxy: {
         '/api': {
-          target: 'https://nest-api.wangbaoqi1.site/api/',
-          // target: 'http://localhost:7001',
+          target: 'http://192.168.0.201:9094/',
           changeOrigin: true,
           rewrite: (path) => path.replace(/^\/api/, ''),
         },
         '/ws-api': {
-          target: 'wss://nest-api.wangbaoqi1.site',
           // target: 'http://localhost:7002',
           changeOrigin: true, //是否允许跨域
           ws: true,

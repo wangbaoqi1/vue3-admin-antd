@@ -1,5 +1,5 @@
 {
-  "name": "vue3-admin-antd",
+  "name": "easy-truck-pc",
   "version": "1.0.0",
   "author": {
     "name": "wangbbaoqi1",
@@ -40,6 +40,7 @@
     "echarts": "^5.4.3",
     "file-saver": "~2.0.5",
     "lodash-es": "~4.17.21",
+    "md5": "^2.3.0",
     "mitt": "~3.0.1",
     "nprogress": "~1.0.0-1",
     "pinia": "~2.1.7",

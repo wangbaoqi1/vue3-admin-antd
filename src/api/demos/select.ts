@@ -1,18 +1,9 @@
-import { request } from '@/utils/request';
+import Api from '../login/loginApi';
 
 /**
  * @description Get sample options value
  */
-export function optionsListApi(params?: any) {
-  return request<{ list: { id: string; name: string }[] }>(
-    {
-      url: '/select/getDemoOptions',
-      method: 'get',
-      params,
-    },
-    {
-      isMock: true,
-      isGetDataDirectly: true,
-    },
-  );
+
+export function optionsListApi(parameter) {
+  return Api.requestParam('/select/getDemoOptions', 'get', { ...parameter });
 }

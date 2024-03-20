@@ -5,19 +5,19 @@ import type { WhiteNameList } from './constant';
 import type { Router, RouteLocationNormalized } from 'vue-router';
 import { useUserStore } from '@/store/modules/user';
 import { useKeepAliveStore } from '@/store/modules/keepAlive';
-import { ACCESS_TOKEN_KEY } from '@/enums/cacheEnum';
+import { ACCESS_TOKEN } from '@/enums/cacheEnum';
 import { Storage } from '@/utils/Storage';
 import { to as _to } from '@/utils/awaitTo';
 
 NProgress.configure({ showSpinner: false }); // NProgress Configuration
 
-const defaultRoutePath = '/dashboard/welcome';
+const defaultRoutePath = '/app/version';
 
 export function createRouterGuards(router: Router, whiteNameList: WhiteNameList) {
   router.beforeEach(async (to, _, next) => {
     NProgress.start(); // start progress bar
     const userStore = useUserStore();
-    const token = Storage.get(ACCESS_TOKEN_KEY, null);
+    const token = Storage.get(ACCESS_TOKEN, null);
 
     if (token) {
       if (to.name === LOGIN_NAME) {
@@ -60,8 +60,7 @@ export function createRouterGuards(router: Router, whiteNameList: WhiteNameList)
 
   router.afterEach((to, from, failure) => {
     const keepAliveStore = useKeepAliveStore();
-    const token = Storage.get(ACCESS_TOKEN_KEY, null);
-
+    const token = Storage.get(ACCESS_TOKEN, null);
     if (isNavigationFailure(failure)) {
       console.log('failed navigation', failure);
     }

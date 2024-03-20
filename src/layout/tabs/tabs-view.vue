@@ -192,6 +192,8 @@
 
   // 刷新页面
   const reloadPage = () => {
+    console.log(REDIRECT_NAME, unref(route).fullPath, 909090);
+
     router.replace({
       name: REDIRECT_NAME,
       params: {

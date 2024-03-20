@@ -4,7 +4,7 @@ import { defineStore } from 'pinia';
 import type { RouteRecordRaw } from 'vue-router';
 import { store } from '@/store';
 import { login } from '@/api/login';
-import { ACCESS_TOKEN_KEY } from '@/enums/cacheEnum';
+import { ACCESS_TOKEN } from '@/enums/cacheEnum';
 import { Storage } from '@/utils/Storage';
 import { logout, getInfo, permmenu } from '@/api/account';
 import { generatorDynamicRouter } from '@/router/generator-router';
@@ -24,7 +24,7 @@ interface UserState {
 export const useUserStore = defineStore({
   id: 'user',
   state: (): UserState => ({
-    token: Storage.get(ACCESS_TOKEN_KEY, null),
+    token: Storage.get(ACCESS_TOKEN, null),
     name: 'amdin',
     avatar: '',
     perms: [],
@@ -58,7 +58,7 @@ export const useUserStore = defineStore({
     setToken(token: string) {
       this.token = token ?? '';
       const ex = 7 * 24 * 60 * 60 * 1000;
-      Storage.set(ACCESS_TOKEN_KEY, this.token, ex);
+      Storage.set(ACCESS_TOKEN, this.token, ex);
     },
     /** 登录 */
     async login(params: API.LoginParams) {

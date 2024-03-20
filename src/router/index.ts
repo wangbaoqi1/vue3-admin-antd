@@ -15,7 +15,7 @@ export const routes: Array<RouteRecordRaw> = [
     redirect: '/dashboard/welcome',
     component: () => import(/* webpackChunkName: "layout" */ '@/layout/index.vue'),
     meta: {
-      title: '首页',
+      title: 'APP管理',
     },
     children: [],
   },

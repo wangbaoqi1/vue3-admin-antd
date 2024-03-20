@@ -23,7 +23,6 @@ export const permission: ObjectDirective = {
       } else {
         el.remove();
       }
-      console.log(action, effect);
     }
   },
 };
@@ -39,8 +38,8 @@ export const permission: ObjectDirective = {
 
 export const markDirective = {
   mounted(el, binding) {
-    const { roles } = Storage.get('userInfo');
-    const roleArr: RoleEnum[] = roles.map((val) => val.value);
+    const { roles = [] } = Storage.get('userInfo');
+    const roleArr: RoleEnum[] = roles.map((val) => val?.value);
     const marksArr = binding.value;
     let flag = false;
     marksArr.forEach((val) => {

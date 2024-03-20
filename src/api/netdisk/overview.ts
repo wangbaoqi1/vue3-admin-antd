@@ -1,8 +1,5 @@
-import { request } from '@/utils/request';
+import Api from '../login/loginApi';
 
-export function getNetdiskDesc() {
-  return request<API.OverviewSpaceInfo>({
-    url: 'netdisk/overview/desc',
-    method: 'get',
-  });
+export function getNetdiskDesc(parameter) {
+  return Api.requestParam('netdisk/overview/desc', 'get', { ...parameter });
 }

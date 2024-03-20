@@ -1,107 +1,127 @@
 <template>
   <div class="login-box">
-    <div class="login-logo">
-      <!-- <svg-icon name="logo" :size="45" /> -->
-      <img src="~@/assets/images/logo.jpg" width="45" />
-      <h1 class="mb-0 ml-2 text-3xl font-bold">Antd Admin</h1>
+    <div class="login-left">
+      <img src="http://static-test.easytruck-go.com/img/loginEasy.png" />
     </div>
-    <a-form layout="horizontal" :model="state.formInline" @submit.prevent="handleSubmit">
-      <a-form-item>
-        <a-input v-model:value="state.formInline.username" size="large" placeholder="rootadmin">
-          <template #prefix><user-outlined type="user" /></template>
-        </a-input>
-      </a-form-item>
-      <a-form-item>
-        <a-input
-          v-model:value="state.formInline.password"
-          size="large"
-          type="password"
-          placeholder="123456"
-          autocomplete="new-password"
-        >
-          <template #prefix><lock-outlined type="user" /></template>
-        </a-input>
-      </a-form-item>
-      <a-form-item>
-        <a-input
-          v-model:value="state.formInline.verifyCode"
-          placeholder="验证码"
-          :maxlength="4"
-          size="large"
-        >
-          <template #prefix>
-            <SafetyOutlined />
-          </template>
-          <template #suffix>
-            <img
-              :src="state.captcha"
-              class="absolute right-0 h-full cursor-pointer"
-              @click="setCaptcha"
-            />
-          </template>
-        </a-input>
-      </a-form-item>
-      <a-form-item>
-        <a-button type="primary" html-type="submit" size="large" :loading="state.loading" block>
-          登录
-        </a-button>
-      </a-form-item>
-    </a-form>
+    <div class="login-right">
+      <div class="login-title">
+        <h1 class="mb-0 ml-2 text-3xl font-bold">Sign in</h1>
+        <div>Easy truck Easy go</div>
+      </div>
+      <a-form
+        ref="formRef"
+        layout="horizontal"
+        :model="state.formInline"
+        :rules="rules"
+        @finish="handleSubmit"
+      >
+        <a-form-item name="username">
+          <a-input
+            v-model:value="state.formInline.username"
+            size="large"
+            placeholder="请输入用户名"
+          >
+            <template #prefix><user-outlined type="user" /></template>
+          </a-input>
+        </a-form-item>
+        <a-form-item name="password">
+          <a-input
+            v-model:value="state.formInline.password"
+            size="large"
+            type="password"
+            placeholder="请输入密码"
+            autocomplete="new-password"
+          >
+            <template #prefix><lock-outlined type="user" /></template>
+          </a-input>
+        </a-form-item>
+        <a-form-item name="verifyCode">
+          <a-input
+            v-model:value="state.formInline.captchaCode"
+            placeholder="验证码"
+            :maxlength="4"
+            size="large"
+          >
+            <template #prefix>
+              <SafetyOutlined />
+            </template>
+            <template #suffix>
+              <img
+                :src="state.captcha"
+                class="absolute right-3 h-full cursor-pointer"
+                @click="onRefreshCaptcha"
+              />
+            </template>
+          </a-input>
+        </a-form-item>
+        <a-form-item>
+          <a-button type="primary" html-type="submit" size="large" :loading="state.loading" block>
+            登录
+          </a-button>
+        </a-form-item>
+      </a-form>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-  import { reactive } from 'vue';
+  import { reactive, ref } from 'vue';
   import { UserOutlined, LockOutlined, SafetyOutlined } from '@ant-design/icons-vue';
   import { useRoute, useRouter } from 'vue-router';
+  import md5 from 'md5';
   import { message, Modal } from 'ant-design-vue';
   import { useUserStore } from '@/store/modules/user';
-  import { getImageCaptcha } from '@/api/login';
   import { to } from '@/utils/awaitTo';
 
   const state = reactive({
     loading: false,
-    captcha: '',
+    captcha: `/api/captcha/generate?captchaType=Login&d=${new Date().getTime()}`,
     formInline: {
       username: '',
       password: '',
-      verifyCode: '',
-      captchaId: '',
+      captchaCode: '',
     },
   });
 
   const route = useRoute();
   const router = useRouter();
-
+  const formRef = ref();
   const userStore = useUserStore();
-
-  const setCaptcha = async () => {
-    const { id, img } = await getImageCaptcha({ width: 100, height: 50 });
-    state.captcha = img;
-    state.formInline.captchaId = id;
+  const rules = {
+    username: [{ required: true, message: '请输入密码', trigger: 'change' }],
+    password: [{ required: true, message: '请输入账号', trigger: 'change' }],
+    captchaCode: [
+      {
+        required: true,
+        pattern: /^[a-zA-Z0-9]+$/,
+        message: '请输入正确的验证码',
+        trigger: 'change',
+      },
+    ],
   };
-  setCaptcha();
-
+  // state.captcha =
+  //   'https://mgr-test.ndwybd.com/api/captcha/generate?captchaType=Login&d=1710744853561&width=100&height=50';
+  const onRefreshCaptcha = () => {
+    state.captcha = `/api/captcha/generate?captchaType=Login&d=${new Date().getTime()}`;
+  };
   const handleSubmit = async () => {
-    const { username, password, verifyCode } = state.formInline;
-    if (username.trim() == '' || password.trim() == '') {
-      return message.warning('用户名或密码不能为空！');
-    }
-    if (!verifyCode) {
-      return message.warning('请输入验证码！');
-    }
+    const { username, password, captchaCode } = state.formInline;
     message.loading('登录中...', 0);
     state.loading = true;
-    console.log(state.formInline, 11909091, route);
-    // params.password = md5(password)
-    router.replace((route.query.redirect as string) ?? '/');
-    const [err] = await to(userStore.login(state.formInline));
+    const [err] = await to(
+      userStore.login({
+        username: username.trim(),
+        password: md5(password.trim()),
+        captchaCode,
+      }),
+    );
     if (err) {
-      Modal.error({
-        title: () => '提示',
-        content: () => err.message,
-      });
-      setCaptcha();
+      console.log(err, 1000);
+
+      // Modal.error({
+      //   title: () => '提示',
+      //   content: () => err.message,
+      // });
     } else {
       message.success('登录成功！');
       setTimeout(() => router.replace((route.query.redirect as string) ?? '/'));
@@ -112,36 +132,5 @@
 </script>
 
 <style lang="less" scoped>
-  .login-box {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100vw;
-    height: 100vh;
-    padding-top: 240px;
-    background: url('@/assets/login.svg');
-    background-size: 100%;
-
-    .login-logo {
-      display: flex;
-      align-items: center;
-      margin-bottom: 30px;
-
-      .svg-icon {
-        font-size: 48px;
-      }
-    }
-
-    :deep(.ant-form) {
-      width: 400px;
-
-      .ant-col {
-        width: 100%;
-      }
-
-      .ant-form-item-label {
-        padding-right: 6px;
-      }
-    }
-  }
+  @import url('./index.less');
 </style>
